@@ -1,0 +1,29 @@
+.input {
+    display: flex;
+    align-items: center;
+}
+
+.input label {
+    font-weight: bold;
+    margin-right: 1rem;
+}
+
+.date-picker {
+    height: 2.5rem;
+    padding: 0.5rem 0.5rem;
+    font: inherit;
+    font-size: 1.25rem;
+    border: 1px solid rgba(0, 0, 0, 0)!important;
+}
+.date-picker:hover{
+    border: 1px solid rgba(0, 0, 0, 0.37)!important;
+}
+
+input[type="month"] {
+    border: none;
+}
+
+::-webkit-calendar-picker-indicator {
+    margin-left: -11rem;
+    padding-left: 10rem;
+}

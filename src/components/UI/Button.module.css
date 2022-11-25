@@ -1,0 +1,32 @@
+.button-container{
+  height: 1.75rem;
+}
+.button {
+  font: inherit;
+  font-size: 1.25rem;
+  padding: 0.5rem 0.5rem;
+  cursor: pointer;
+  border: none;
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0);
+
+}
+
+.button:hover,
+.button:active {
+ border: 1px solid rgba(0, 0, 0, 0.37);
+}
+
+.button:focus {
+  outline: none;
+}
+
+button:disabled,
+button:focus:disabled,
+button:hover:disabled,
+button:active:disabled {
+  background: #ccc;
+  border-color: #ccc;
+  color: #666666;
+  cursor: not-allowed;
+}

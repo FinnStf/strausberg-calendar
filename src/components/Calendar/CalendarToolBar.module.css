@@ -1,0 +1,5 @@
+.toolbar{
+    border-bottom: solid 0.0625rem black;
+    display: flex;
+    height: 2.75rem;
+}
