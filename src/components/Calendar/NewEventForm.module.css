@@ -1,0 +1,30 @@
+.header {
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.5rem;
+    border-bottom: .125rem solid #666666;
+    padding-bottom: 0.5rem;
+}
+.header button{
+    position: absolute;
+    top: 5px;
+    right: 10px;
+}
+
+.form-body {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    padding: 10px;
+    justify-items: center;
+}
+
+.footer {
+    display: inline-grid;
+    grid-template-columns: auto auto;
+    width: 100%;
+    margin: 1rem .5rem;
+}
+.footer button{
+ width: 90%;
+}

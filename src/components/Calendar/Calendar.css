@@ -1,0 +1,21 @@
+.fc .fc-button-primary{
+    background-color: white;
+    color: #6f171b;
+}
+.fc .fc-button-primary:hover{
+    background-color: rgb(92, 108, 98);
+    color: #6f171b;
+}
+.fc .fc-button-primary:focus:active{
+    background-color: rgb(92, 108, 98);
+    color: #6f171b;
+}
+.fc .fc-button-primary:disabled{
+    background-color: white;
+    border:none;
+    color: #6f171b;
+}
+.fc-h-event{
+    border: none;
+    background-color: transparent;
+}

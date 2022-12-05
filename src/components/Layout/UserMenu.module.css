@@ -1,20 +1,17 @@
 .button {
     cursor: pointer;
-    font: inherit;
-    border: 3px solid #6f171b;
+    font-size: 1rem;
     padding: 0.5rem 0.5rem;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
     border-radius: 25px;
     font-weight: bold;
-    margin: 0 1rem;
+    border-style: none;
+    background-color: transparent;
+    color: black;
 }
 
 .button:hover,
 .button:active {
-    background-color: rgb(92, 108, 98);
-    color: white;
+    color: #6f171b;
 }
 
 .icon {

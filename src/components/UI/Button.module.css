@@ -2,31 +2,47 @@
   height: 1.75rem;
 }
 .button {
+  margin: .2rem;
   font: inherit;
   font-size: 1.25rem;
   padding: 0.5rem 0.5rem;
   cursor: pointer;
   border: none;
   background-color: white;
-  border: 1px solid rgba(0, 0, 0, 0);
-
+  border: 2px solid rgba(111, 23, 27, 1);
+  border-radius: 5px;
 }
-
-.button:hover,
-.button:active {
- border: 1px solid rgba(0, 0, 0, 0.37);
+.button:hover{
+  border: 2px solid rgba(102, 102, 102, 0.5);
 }
-
-.button:focus {
-  outline: none;
+.button:focus:active:hover{
+  background-color: rgb(92, 108, 98);
+  color: #6f171b;
 }
-
-button:disabled,
-button:focus:disabled,
-button:hover:disabled,
-button:active:disabled {
-  background: #ccc;
-  border-color: #ccc;
+.button:disabled{
+  background-color: white;
+  border:none;
   color: #666666;
-  cursor: not-allowed;
+}
+.button:disabled:hover{
+  background-color: transparent !important;
+}
+.button.positive{
+  border: 2px solid rgb(92, 108, 98);
+}
+.button.positive:hover{
+  background-color: rgba(92, 108, 98, 0.49);
+}
+.button.negative:hover{
+background-color: rgba(111, 23, 27, 0.32);
+}
+.button.close-button{
+  border: 2px solid transparent;
+}
+.button.close-button:focus:active{
+  background-color: transparent;
+  color: #666666;
+}
+.button.close-button:hover{
+  color: #666666;
 }

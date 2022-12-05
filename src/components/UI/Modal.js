@@ -4,13 +4,13 @@ import ReactDOM from "react-dom";
 
 function Backdrop(props) {
     return (
-        <div onClick={props.handleClick} className={styles.backdrop}></div>
+        <div onClick={props.handleClick} className={`${styles.backdrop} ${styles[props.style]}`}></div>
     )
 }
 
 function Overlay(props) {
     return (
-        <div className={styles.modal}>
+        <div className={`${styles.modal} ${styles[props.style]}`}>
             {props.children}
         </div>
     )
@@ -19,8 +19,8 @@ function Overlay(props) {
 function Modal(props) {
     return (
         <Fragment>
-            {ReactDOM.createPortal(<Backdrop handleClick={props.handleClick}/>, document.getElementById("modal-root"))}
-            {ReactDOM.createPortal(<Overlay>{props.children}</Overlay>, document.getElementById("modal-root"))}
+            {ReactDOM.createPortal(<Backdrop style={props.style} handleClick={props.handleClick}/>, document.getElementById("modal-root"))}
+            {ReactDOM.createPortal(<Overlay style={props.style}>{props.children}</Overlay>, document.getElementById("modal-root"))}
         </Fragment>
     )
 }

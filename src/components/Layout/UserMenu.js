@@ -1,4 +1,5 @@
 import styles from "./UserMenu.module.css"
+import ReactTooltip from "react-tooltip";
 function UserMenu(props) {
 
     return (
@@ -6,7 +7,7 @@ function UserMenu(props) {
             <span className={styles.icon}>
                 <i className="bi bi-person-circle icon"></i>
             </span>
-            <span>Finn Steffan</span>
+            <span>Hallo, Finn</span>
         </button>
     )
 }

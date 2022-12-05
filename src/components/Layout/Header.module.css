@@ -1,16 +1,16 @@
 .header {
     position: fixed;
-    padding: 0 1%;
+    padding: 1rem;
     top: 0;
-    left: 0;
-    width: 100%;
+    left: 5%;
+    width: 90%;
     height: 4rem;
-    color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
     z-index: 10;
+    background-color: white;
+    border-bottom: .2rem solid #6f171b;
 }
 
 .header .logo {

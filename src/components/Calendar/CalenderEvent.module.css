@@ -1,0 +1,21 @@
+.event-item{
+    height: 2rem;
+    padding-left: 1rem;
+    overflow: hidden;
+    width: 100%;
+}
+.event-item.high-demand{
+    background-color: rgba(111, 23, 27, 0.47) !important;
+}
+.event-item.medium-demand{
+    background-color: rgba(250, 178, 50, 0.56) !important;
+}.event-item.no-demand{
+     background-color: rgba(63, 133, 92, 0.55) !important;
+ }
+.event-title{
+    display: flex;
+    justify-content: left;
+}
+.event-title b{
+margin-left: .5rem;
+}
