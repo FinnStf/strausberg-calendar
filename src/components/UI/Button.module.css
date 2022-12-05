@@ -29,6 +29,7 @@
 }
 .button.positive{
   border: 2px solid rgb(92, 108, 98);
+  color: #5c6c5d;
 }
 .button.positive:hover{
   background-color: rgba(92, 108, 98, 0.49);

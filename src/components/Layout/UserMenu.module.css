@@ -1,6 +1,6 @@
 .button {
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 1.75rem;
     padding: 0.5rem 0.5rem;
     border-radius: 25px;
     font-weight: bold;
@@ -13,15 +13,13 @@
 .button:active {
     color: #6f171b;
 }
-
-.icon {
-    font-size: 1.35rem;
-    margin-right: 0.5rem;
-}
-
 .button:active {
     animation: bump 300ms ease-out;
 }
+.icon {
+    margin-right: 0.5rem;
+}
+
 
 @keyframes bump {
     0% {

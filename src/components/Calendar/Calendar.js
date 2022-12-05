@@ -8,6 +8,9 @@ import NewEventForm from "./NewEventForm";
 import EventContext from "../../store/event-context";
 import CalendarEvent from "./CalendarEvent";
 
+const calendarStyleInfo = {
+    height:'100%'
+}
 
 function Calendar() {
     const eventCtx = useContext(EventContext)
@@ -53,7 +56,7 @@ function Calendar() {
     }
 
     return (
-        <Card>
+        <Card className='calendar-card'>
             {modalVisible && <NewEventForm
                 event={eventCtx.selectedEvent}
                 dateString={dateString}
@@ -63,6 +66,7 @@ function Calendar() {
                 onCloseModal={closeModal}
                 style={`${modalGoingOut && 'out'}`}/>}
             <FullCalendar
+                {...calendarStyleInfo}
                 plugins={[dayGridPlugin, interactionPlugin]}
                 initialView="dayGridMonth"
                 events={eventCtx.events}
