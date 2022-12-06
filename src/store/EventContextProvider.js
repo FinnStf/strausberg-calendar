@@ -5,14 +5,14 @@ const defaultEventObj = {
     events: [
         {
             title: 'event 1',
-            start: '2022-11-12T10:30',
-            end: '2022-11-12T12:30',
+            start: '2022-12-12T10:30',
+            end: '2022-12-12T12:30',
             extendedProps: {id: '1', neededEmployees: 4}
         },
         {
             title: 'event 2',
-            start: '2022-11-02T10:30',
-            end: '2022-11-02T17:30',
+            start: '2022-12-02T10:30',
+            end: '2022-12-02T17:30',
             extendedProps: {id: '2', neededEmployees: 4}
         }],
     selectedEvent: {title: '', start: '', end: '', extendedProps: {id: '', neededEmployees: 0}}

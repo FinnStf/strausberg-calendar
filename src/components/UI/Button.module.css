@@ -22,7 +22,7 @@
 .button:disabled{
   background-color: white;
   border:none;
-  color: #666666;
+  color: #666666!important;
 }
 .button:disabled:hover{
   background-color: transparent !important;
@@ -30,6 +30,9 @@
 .button.positive{
   border: 2px solid rgb(92, 108, 98);
   color: #5c6c5d;
+}
+.button.negative{
+  color: #6f171b;
 }
 .button.positive:hover{
   background-color: rgba(92, 108, 98, 0.49);

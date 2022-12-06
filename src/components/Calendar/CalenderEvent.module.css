@@ -1,16 +1,21 @@
 .event-item{
     height: 2rem;
-    padding-left: 1rem;
-    overflow: hidden;
     width: 100%;
+    overflow: hidden;
+}
+
+.event-item button{
+    width: 100%;
+    background-color: transparent;
+    border: none;
 }
 .event-item.high-demand{
-    background-color: rgba(111, 23, 27, 0.47) !important;
+    border: 2px solid rgba(111, 23, 27, 0.47);
 }
 .event-item.medium-demand{
-    background-color: rgba(250, 178, 50, 0.56) !important;
+    border: 2px solid rgba(250, 178, 50, 0.56);
 }.event-item.no-demand{
-     background-color: rgba(63, 133, 92, 0.55) !important;
+     border: 2px solid rgba(63, 133, 92, 0.55);
  }
 .event-title{
     display: flex;
@@ -18,4 +23,7 @@
 }
 .event-title b{
 margin-left: .5rem;
+}
+.event-dropdown-menu{
+    border: 1px solid black;
 }

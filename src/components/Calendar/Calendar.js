@@ -11,7 +11,6 @@ import CalendarEvent from "./CalendarEvent";
 const calendarStyleInfo = {
     height:'100%'
 }
-
 function Calendar() {
     const eventCtx = useContext(EventContext)
     const [modalVisible, setModalVisible] = useState(false)
@@ -25,7 +24,7 @@ function Calendar() {
     }
     const handleEventClick = (event) => {
         eventCtx.selectEvent(event.event.extendedProps.id)
-        setModalVisible(true)
+       // setModalVisible(true)
     }
     const handleAddEvent = (event) => {
         eventCtx.addEvent(event)
