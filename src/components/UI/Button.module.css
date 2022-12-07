@@ -21,8 +21,8 @@
 }
 .button:disabled{
   background-color: white;
-  border:none;
-  color: #666666;
+  border:none!important;
+  color: rgba(102, 102, 102, 0.54) !important;
 }
 .button:disabled:hover{
   background-color: transparent !important;
@@ -30,6 +30,10 @@
 .button.positive{
   border: 2px solid rgb(92, 108, 98);
   color: #5c6c5d;
+}
+.button.negative{
+  border: 2px solid rgb(111, 23, 27);
+  color:#6f171b;
 }
 .button.positive:hover{
   background-color: rgba(92, 108, 98, 0.49);
@@ -46,4 +50,17 @@ background-color: rgba(111, 23, 27, 0.32);
 }
 .button.close-button:hover{
   color: #666666;
+}
+.button.delete-button{
+  border: none;
+}
+.button.delete-button{
+  font-size: medium;
+  border: none;
+}
+.button.delete-button:focus:active{
+  background-color:transparent;
+}
+.button.delete-button:hover{
+  color: #6f171b;
 }

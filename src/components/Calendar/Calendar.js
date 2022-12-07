@@ -9,7 +9,7 @@ import EventContext from "../../store/event-context";
 import CalendarEvent from "./CalendarEvent";
 
 const calendarStyleInfo = {
-    height:'100%'
+    height: '100%'
 }
 
 function Calendar() {
@@ -35,7 +35,7 @@ function Calendar() {
         eventCtx.updateEvent(event)
         setModalVisible(false)
     }
-    const handleDeleteEvent = (eventId) =>{
+    const handleDeleteEvent = (eventId) => {
         eventCtx.deleteEvent(eventId)
         setModalVisible(false)
     }
@@ -44,15 +44,17 @@ function Calendar() {
             <CalendarEvent
                 timeText={eventInfo.timeText}
                 title={eventInfo.event.title}
-                employeesNeeded={eventInfo.event.extendedProps.neededEmployees}/>
+                employeesNeeded={eventInfo.event.extendedProps.neededEmployees}
+                assignedEmployees={eventInfo.event.extendedProps.assignedEmployees}
+            />
         )
     }
-    const closeModal = () =>{
+    const closeModal = () => {
         setModalGoingOut(true)
-        setTimeout(()=>{
+        setTimeout(() => {
             setModalVisible(false)
             setModalGoingOut(false)
-        },200)
+        }, 200)
     }
 
     return (

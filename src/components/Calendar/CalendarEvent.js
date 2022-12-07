@@ -3,16 +3,19 @@ import {useEffect, useState} from "react";
 
 function CalendarEvent(props) {
     const [eventStyle, setEventStyle] = useState('')
-    useEffect(()=>{
-       setEventStyle(calcEventStyle(props.employeesNeeded))
-    },[props.employeesNeeded])
+    const [openSlotCount, setOpenSlotCount] = useState(0)
 
-    const calcEventStyle = (numbEmployees) =>{
-        if (numbEmployees>3){
+    useEffect(() => {
+        setEventStyle(calcEventStyle(props.employeesNeeded - props.assignedEmployees.length))
+        setOpenSlotCount(props.employeesNeeded - props.assignedEmployees.length)
+    }, [props.employeesNeeded, props.assignedEmployees])
+
+    const calcEventStyle = (numbEmployees) => {
+        if (numbEmployees > 3) {
             return 'high-demand'
-        }else if (numbEmployees>=1){
+        } else if (numbEmployees >= 1) {
             return 'medium-demand'
-        }else{
+        } else {
             return 'no-demand'
         }
     }
@@ -24,7 +27,8 @@ function CalendarEvent(props) {
                 <b>{props.title}</b>
             </span>
             <div>
-                <i>{props.employeesNeeded} offene Stellen</i>
+                {openSlotCount >= 0 ? <i>{openSlotCount} offene Stellen</i> :
+                    <i>{Math.abs(openSlotCount)} MA zu viel</i>}
             </div>
         </div>
     )

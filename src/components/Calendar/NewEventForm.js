@@ -3,9 +3,14 @@ import styles from "./NewEventForm.module.css"
 import Button from "../UI/Button";
 import Input from "../UI/Input";
 import {splitDateTime, concatDateTime} from "../../logic/calendar-transformer";
-import {useEffect, useRef} from "react";
+import {useEffect, useRef, useState} from "react";
+import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
+import EmployeeList from "./EmployeeList";
+
 
 function NewEventForm(props) {
+    const [userTabIsVisible, setUserTabIsVisible] = useState(false)
     /*
     Initializing Form
      */
@@ -19,14 +24,14 @@ function NewEventForm(props) {
     let submitText = 'Anlegen'
     let deleteButtonIsVisible = false
     if (props.event.extendedProps.id !== '') {
-        title = `Event '${props.event.title}' bearbeiten`
+        title = `Event ${props.event.title} bearbeiten`
         submitText = 'Ändern'
-        deleteButtonIsVisible=true
+        deleteButtonIsVisible = true
     }
     let {date: startDate, time: startTime} = splitDateTime(props.event.start)
     let {time: endTime} = splitDateTime(props.event.end)
-    if (!startDate){
-        startDate=props.dateString
+    if (!startDate) {
+        startDate = props.dateString
     }
 
     useEffect(() => {
@@ -35,6 +40,9 @@ function NewEventForm(props) {
         startTime_field.current.value = startTime
         endTime_field.current.value = endTime
         neededEmployees_field.current.value = props.event.extendedProps.neededEmployees
+        if (props.event.extendedProps.id !== '') {
+            setUserTabIsVisible(true)
+        }
     }, [props.event, startTime, endTime, startDate])
 
     /*
@@ -64,22 +72,34 @@ function NewEventForm(props) {
     return (
         <Modal style={props.style} handleClick={props.onCloseModal}>
             <div className={styles.header}>
-                <span>{title}</span>
+                <h2>{title}</h2>
                 <Button className='close-button' handleClick={props.onCloseModal}>X</Button>
             </div>
-            <form onSubmit={onSubmitForm}>
-                <div className={styles["form-body"]}>
-                    <Input label="Name" input={{type: "text", ref: title_field}}/>
-                    <Input label="Datum" input={{type: "date", ref: date_field}}/>
-                    <Input label="Von" input={{type: "time", ref: startTime_field}}/>
-                    <Input label="Bis" input={{type: "time", ref: endTime_field}}/>
-                    <Input label="Benötigte Mitarbeiter" input={{type: "number", ref: neededEmployees_field}}/>
-                </div>
-                <div className={styles.footer}>
-                    <Button disabled={!deleteButtonIsVisible} handleClick={onDeleteEvent} className="negative">Löschen</Button>
-                    <Button type="submit" className="positive">{submitText}</Button>
-                </div>
-            </form>
+            <div className={styles.body}>
+                <Tabs defaultActiveKey="edit-event">
+                    <Tab tabClassName={styles['tab-item']} eventKey='edit-event' title='Event Daten'>
+                        <form onSubmit={onSubmitForm}>
+                            <div className={styles["form-body"]}>
+                                <Input label="Name" input={{type: "text", ref: title_field}}/>
+                                <Input label="Datum" input={{type: "date", ref: date_field}}/>
+                                <Input label="Von" input={{type: "time", ref: startTime_field}}/>
+                                <Input label="Bis" input={{type: "time", ref: endTime_field}}/>
+                                <Input label="Benötigte Mitarbeiter"
+                                       input={{type: "number", ref: neededEmployees_field}}/>
+                            </div>
+                            <div className={styles.footer}>
+                                <Button disabled={!deleteButtonIsVisible} handleClick={onDeleteEvent}
+                                        className="negative">Löschen</Button>
+                                <Button type="submit" className="positive">{submitText}</Button>
+                            </div>
+                        </form>
+                    </Tab>
+                    {userTabIsVisible &&
+                        <Tab tabClassName={styles['tab-item']} eventKey='edit-assignment' title='Mitarbeiter Zuweisung'>
+                            <EmployeeList assignedEmployees={props.event.extendedProps.assignedEmployees}></EmployeeList>
+                        </Tab>}
+                </Tabs>
+            </div>
         </Modal>
     )
 }

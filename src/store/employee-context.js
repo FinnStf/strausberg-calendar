@@ -1,6 +1,6 @@
 import React from "react";
 
 const employeeContext = React.createContext({
-    shifts: []
+    employees: []
 })
 export default employeeContext
