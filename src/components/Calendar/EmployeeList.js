@@ -19,7 +19,7 @@ function EmployeeList(props) {
         setEmployeeSelection(notAssignedEmployees)
         setSelectedEmployee({id: -1})
 
-    }, [assignedEmployees])
+    }, [assignedEmployees, employees])
 
 
     const handleEmployeeSelection = (event) => {
