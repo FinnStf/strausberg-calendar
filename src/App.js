@@ -1,21 +1,29 @@
 import Header from "./components/Layout/Header";
-import {Fragment} from "react";
+import {Fragment, useContext} from "react";
 import Calendar from "./components/Calendar/Calendar";
 import EmployeeContextProvider from "./store/EmployeeContextProvider";
 import EventContextProvider from "./store/EventContextProvider";
 import 'bootstrap/dist/css/bootstrap.min.css';
-function App() {
+import {Route, Routes, Navigate} from "react-router-dom";
+import AuthContext from "./store/auth-context";
+import Login from "./pages/Login";
 
+function App() {
+    const authCtx = useContext(AuthContext)
     return (
         <Fragment>
             <Header/>
-            <main>
-                <EmployeeContextProvider>
-                    <EventContextProvider>
-                        <Calendar/>
-                    </EventContextProvider>
-                </EmployeeContextProvider>
-            </main>
+            <EmployeeContextProvider>
+                <EventContextProvider>
+                    <main>
+                        <Routes>
+                            {!authCtx.isLoggedIn && <Route path='/login' element={<Login/>}/>}
+                            {!authCtx.isLoggedIn && <Route path='/' element={<Navigate to={'/login'}/>}/>}
+                            {authCtx.isLoggedIn && <Route path='/' element={<Calendar/>}/>}
+                        </Routes>
+                    </main>
+                </EventContextProvider>
+            </EmployeeContextProvider>
         </Fragment>
     );
 }
