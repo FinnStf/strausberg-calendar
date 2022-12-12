@@ -23,6 +23,11 @@ body {
 main{
   padding: 5rem 1rem 0rem 1rem;
 }
+@media screen and (max-width: 992px) {
+  main {
+    padding: 4.4rem 0rem 0rem 0rem;
+  }
+}
 /*
 Overwriting bootstrap styling
  */

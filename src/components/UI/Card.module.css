@@ -11,3 +11,10 @@
 .calendar-card{
     height: 88vh;
 }
+@media screen and (max-width: 992px) {
+    card {
+        padding: .5rem 1.5rem;
+        width: 98%;
+        margin-left: 1%;
+    }
+}
