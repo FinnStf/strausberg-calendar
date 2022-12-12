@@ -6,12 +6,14 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import PersonAdd from '@mui/icons-material/PersonAdd';
-import Settings from '@mui/icons-material/Settings';
+import authContext from '../../store/auth-context'
 import Logout from '@mui/icons-material/Logout';
-import {useState} from "react";
+import {useContext, useState} from "react";
 
 export default function AccountMenu() {
+    const authCtx = useContext(authContext)
+    const username = authCtx.username
+
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -20,19 +22,23 @@ export default function AccountMenu() {
     const handleClose = () => {
         setAnchorEl(null);
     };
+    const onLogoutHandler = () => {
+        authCtx.logout();
+    }
+
     return (
         <>
-            <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+            <Box sx={{display: 'flex', alignItems: 'center', textAlign: 'center'}}>
                 <Tooltip title="Account settings">
                     <IconButton
                         onClick={handleClick}
                         size="medium"
-                        sx={{ ml: 2 }}
+                        sx={{ml: 2}}
                         aria-controls={open ? 'account-menu' : undefined}
                         aria-haspopup="true"
                         aria-expanded={open ? 'true' : undefined}
                     >
-                        <Avatar sx={{ width: 40, height: 40 }}>M</Avatar>
+                        <Avatar sx={{backgroundColor: 'rgba(111,23,27,0.83)',color:"white", width: 40, height: 40}}>{username.charAt(0).toUpperCase()}</Avatar>
                     </IconButton>
                 </Tooltip>
             </Box>
@@ -68,28 +74,16 @@ export default function AccountMenu() {
                         },
                     },
                 }}
-                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                transformOrigin={{horizontal: 'right', vertical: 'top'}}
+                anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
             >
                 <MenuItem>
-                    <Avatar /> My account
+                    <Avatar/> {username}
                 </MenuItem>
-                <Divider />
-                <MenuItem>
+                <Divider/>
+                <MenuItem onClick={onLogoutHandler}>
                     <ListItemIcon>
-                        <PersonAdd fontSize="small" />
-                    </ListItemIcon>
-                    Add another account
-                </MenuItem>
-                <MenuItem>
-                    <ListItemIcon>
-                        <Settings fontSize="small" />
-                    </ListItemIcon>
-                    Settings
-                </MenuItem>
-                <MenuItem>
-                    <ListItemIcon>
-                        <Logout fontSize="small" />
+                        <Logout fontSize="small"/>
                     </ListItemIcon>
                     Logout
                 </MenuItem>

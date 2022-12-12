@@ -6,29 +6,11 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import AuthContextProvider from "./store/AuthContextProvider";
 import {BrowserRouter} from "react-router-dom";
-import {initializeApp} from 'firebase/app'
-import firebase from "firebase";
-
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyD4RV1Jr4pIwDsfLRjqhHu96N0nLxDxACg",
-    authDomain: "testserver-a17e0.firebaseapp.com",
-    databaseURL: "https://testserver-a17e0-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "testserver-a17e0",
-    storageBucket: "testserver-a17e0.appspot.com",
-    messagingSenderId: "382293909787",
-    appId: "1:382293909787:web:bcbc9cafdce2cf0c3d73be"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const firebaseAuth = firebase.auth(app)
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
-        <AuthContextProvider firebaseAuth={firebaseAuth}>
+        <AuthContextProvider>
             <BrowserRouter>
                 <App/>
             </BrowserRouter>
