@@ -1,7 +1,7 @@
 import AuthContext from "./auth-context";
 import {useCallback, useEffect, useState} from "react";
 import {getAuth} from "firebase/auth";
-import firebaseApp from "../firebase";
+import {firebaseApp} from "../firebase";
 
 const calculateRemainingTime = (expirationTime) => {
     const currentTime = new Date().getTime()

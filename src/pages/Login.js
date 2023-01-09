@@ -10,8 +10,9 @@ import logo from "../assets/logoShort.png"
 import {useContext, useState} from "react";
 import authContext from "../store/auth-context";
 import {useNavigate} from "react-router-dom"
-import firebaseApp from '../firebase.js';
+import {firebaseApp} from '../firebase.js';
 import {getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
+import employeeContext from "../store/employee-context";
 
 
 export default function Login() {
@@ -20,6 +21,7 @@ export default function Login() {
     const [emailError, setEmailError] = useState(null)
     const [pwdError, setPwdError] = useState(null)
     const authCtx = useContext(authContext)
+    const employeeCtx = useContext(employeeContext)
     const auth = getAuth(firebaseApp)
     const navigate = useNavigate()
 
@@ -54,6 +56,7 @@ export default function Login() {
                 // Signed in
                 const user = userCredential.user;
                 authCtx.login(user.accessToken, new Date(Date.now()+1000000))
+                employeeCtx.setLoggedInEmployee(user.reloadUserInfo.localId)
                 navigate('/')
             })
             .catch((error) => {
@@ -68,7 +71,9 @@ export default function Login() {
                     displayName: `${surname} ${lastname}`
                 }).then(() => {
                     const user = userCredential.user;
+                    employeeCtx.addEmployee(user.reloadUserInfo.localId, surname, lastname)
                     authCtx.login(user.accessToken, new Date(Date.now()+1000000))
+                    employeeCtx.setLoggedInEmployee(user.reloadUserInfo.localId)
                     setIsLoading(false)
                     navigate('/')
                 }).catch((error) => {

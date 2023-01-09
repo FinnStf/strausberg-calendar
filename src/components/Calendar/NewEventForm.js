@@ -3,14 +3,16 @@ import styles from "./NewEventForm.module.css"
 import Button from "../UI/Button";
 import Input from "../UI/Input";
 import {splitDateTime, concatDateTime} from "../../logic/calendar-transformer";
-import {useEffect, useRef, useState} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import EmployeeList from "./EmployeeList";
+import EmployeeContext from "../../store/employee-context"
 
 
 function NewEventForm(props) {
     const [userTabIsVisible, setUserTabIsVisible] = useState(false)
+    const employeeCtx = useContext(EmployeeContext)
     /*
     Initializing Form
      */
@@ -35,15 +37,23 @@ function NewEventForm(props) {
     }
 
     useEffect(() => {
-        title_field.current.value = props.event.title
-        date_field.current.value = startDate
-        startTime_field.current.value = startTime
-        endTime_field.current.value = endTime
-        neededEmployees_field.current.value = props.event.extendedProps.neededEmployees
+        /*
+        populate newEvent Form if User is Admin
+         */
+        if (employeeCtx.loggedInEmployee && employeeCtx.loggedInEmployee.isAdmin){
+            title_field.current.value = props.event.title
+            date_field.current.value = startDate
+            startTime_field.current.value = startTime
+            endTime_field.current.value = endTime
+            neededEmployees_field.current.value = props.event.extendedProps.neededEmployees
+        }
+        /*
+        hide the employee assignment tab if eventform is for new event
+          */
         if (props.event.extendedProps.id !== '') {
             setUserTabIsVisible(true)
         }
-    }, [props.event, startTime, endTime, startDate])
+    }, [props.event, startTime, endTime, startDate, employeeCtx.loggedInEmployee.isAdmin])
 
     /*
     Submit Function
@@ -77,6 +87,7 @@ function NewEventForm(props) {
             </div>
             <div className={styles.body}>
                 <Tabs defaultActiveKey="edit-event">
+                    {employeeCtx.loggedInEmployee.isAdmin &&
                     <Tab tabClassName={styles['tab-item']} eventKey='edit-event' title='Event Daten'>
                         <form onSubmit={onSubmitForm}>
                             <div className={styles["form-body"]}>
@@ -94,14 +105,15 @@ function NewEventForm(props) {
                             </div>
                         </form>
                     </Tab>
+                    }
                     {userTabIsVisible &&
-                        <Tab tabClassName={styles['tab-item']} eventKey='edit-assignment' title='Mitarbeiter Zuweisung'>
-                            <EmployeeList assignedEmployees={props.event.extendedProps.assignedEmployees}></EmployeeList>
-                        </Tab>}
+                    <Tab tabClassName={styles['tab-item']} eventKey='edit-assignment' title='Mitarbeiter Zuweisung'>
+                        <EmployeeList assignedEmployees={props.event.extendedProps.assignedEmployees}></EmployeeList>
+                    </Tab>}
                 </Tabs>
-            </div>
-        </Modal>
-    )
-}
+                    </div>
+                    </Modal>
+                    )
+                }
 
-export default NewEventForm;
+                export default NewEventForm;

@@ -6,6 +6,7 @@ import './Calendar.css'
 import {useContext, useState} from "react";
 import NewEventForm from "./NewEventForm";
 import EventContext from "../../store/event-context";
+import EmployeeContext from "../../store/employee-context";
 import CalendarEvent from "./CalendarEvent";
 
 const calendarStyleInfo = {
@@ -14,14 +15,17 @@ const calendarStyleInfo = {
 
 function Calendar() {
     const eventCtx = useContext(EventContext)
+    const employeeCtx = useContext(EmployeeContext)
     const [modalVisible, setModalVisible] = useState(false)
     const [modalGoingOut, setModalGoingOut] = useState(false)
     const [dateString, setDateString] = useState('')
 
     const handleDateClick = (date) => {
+        if(employeeCtx.loggedInEmployee.isAdmin){
         eventCtx.selectEvent("DEFAULT")
         setDateString(date.dateStr)
         setModalVisible(true)
+        }
     }
     const handleEventClick = (event) => {
         eventCtx.selectEvent(event.event.extendedProps.id)
