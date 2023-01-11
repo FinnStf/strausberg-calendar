@@ -12,6 +12,12 @@
     background-color: white;
     border-bottom: .2rem solid #6f171b;
 }
+@media screen and (max-width: 992px) {
+    .header {
+        width: 100%;
+        left: 0%;
+    }
+}
 .header button{
     color: #2b2b2b;
 }
