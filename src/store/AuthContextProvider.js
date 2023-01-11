@@ -19,6 +19,8 @@ const retrieveStoredSessionData = () => {
         localStorage.removeItem('username')
         localStorage.removeItem('token')
         localStorage.removeItem('expirationTime')
+        //set in EmployeeContext
+        localStorage.removeItem('localId')
         return null
     }
     return {
@@ -30,9 +32,6 @@ const retrieveStoredSessionData = () => {
 
 function AuthContextProvider(props) {
     const auth = getAuth(firebaseApp)
-    useEffect(()=>{
-
-    },[auth])
     const tokenData = retrieveStoredSessionData()
     let initialToken;
     let initialUsername;
@@ -50,6 +49,8 @@ function AuthContextProvider(props) {
         localStorage.removeItem('username')
         localStorage.removeItem('token')
         localStorage.removeItem('expirationTime')
+        //set in EmployeeContext
+        localStorage.removeItem('localId')
         if (logoutTimer) {
             clearTimeout(logoutTimer)
         }

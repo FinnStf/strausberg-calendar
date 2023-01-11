@@ -40,9 +40,17 @@ function EmployeeContextProvider(props) {
         }
     },[employeeCollectionRef]);
 
-    useEffect(() => {
-        fetchEmployees()
+    useEffect( () => {
+        async function fetchData() {
+            await fetchEmployees()
+            const storedUserId = localStorage.getItem('localId')
+            if (storedUserId) {
+                dispatchEmployeeState({type: 'SET_LOGGEDIN_EMPLOYEE', localId: storedUserId})
+            }
+        }
+      fetchData()
     }, []);
+
 
     const addEmployee = async (localId, surname, lastname) => {
         const newEmployee = {authId: localId, surname: surname, lastname:lastname, isAdmin:false}
@@ -51,6 +59,7 @@ function EmployeeContextProvider(props) {
         dispatchEmployeeState({type: 'ADD', newEmployee: localEmployeeObj})
     }
     const setLoggedInEmployee = (localId) => {
+        localStorage.setItem('localId',localId)
         dispatchEmployeeState({type: 'SET_LOGGEDIN_EMPLOYEE', localId: localId})
     }
 

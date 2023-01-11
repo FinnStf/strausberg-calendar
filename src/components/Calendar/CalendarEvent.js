@@ -3,14 +3,16 @@ import {useEffect, useState} from "react";
 
 function CalendarEvent(props) {
     const [eventStyle, setEventStyle] = useState('')
+    const [eventMarker, setEventMarker] = useState(false)
     const [openSlotCount, setOpenSlotCount] = useState(0)
 
     useEffect(() => {
-        setEventStyle(calcEventStyle(props.employeesNeeded - props.assignedEmployees.length))
+        setEventStyle(calcEventBackgroundColor(props.employeesNeeded - props.assignedEmployees.length))
         setOpenSlotCount(props.employeesNeeded - props.assignedEmployees.length)
+        setEventMarker(props.assignedEmployees.filter(employee=>employee.id===props.loggedInEmployee.id).length>0)
     }, [props.employeesNeeded, props.assignedEmployees])
 
-    const calcEventStyle = (numbEmployees) => {
+    const calcEventBackgroundColor = (numbEmployees) => {
         if (numbEmployees > 3) {
             return 'high-demand'
         } else if (numbEmployees >= 1) {
@@ -22,6 +24,7 @@ function CalendarEvent(props) {
 
     return (
         <div className={`${styles['event-item']} ${styles[eventStyle]}`}>
+            <div className={`${eventMarker?styles['marked-event']:''}`}></div>
             <span className={styles['event-title']}>
                 <span>{props.timeText}</span>
                 <b>{props.title}</b>

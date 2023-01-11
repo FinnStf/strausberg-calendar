@@ -50,6 +50,7 @@ function Calendar() {
                 title={eventInfo.event.title}
                 employeesNeeded={eventInfo.event.extendedProps.neededEmployees}
                 assignedEmployees={eventInfo.event.extendedProps.assignedEmployees}
+                loggedInEmployee={employeeCtx.loggedInEmployee}
             />
         )
     }

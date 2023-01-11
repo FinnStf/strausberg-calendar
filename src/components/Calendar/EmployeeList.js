@@ -8,14 +8,18 @@ import eventContext from "../../store/event-context";
 function EmployeeList(props) {
     const assignedEmployees = props.assignedEmployees
     const employees = useContext(employeeContext).employees
+    const loggedInEmployee = useContext(employeeContext).loggedInEmployee
     const eventCtx = useContext(eventContext)
     const [employeeSelection, setEmployeeSelection] = useState([])
     const [selectedEmployee, setSelectedEmployee] = useState({})
+    const [loggedInEmployeeAssigned, setLoggedInEmployeeAssigned] = useState(false)
 
     useEffect(() => {
         const notAssignedEmployees = employees.filter((employee) => {
             return assignedEmployees.findIndex((element) => element.id === employee.id) === -1
         })
+        //check if logged in user is already assigned
+        setLoggedInEmployeeAssigned(assignedEmployees.filter((employee)=> loggedInEmployee.id === employee.id).length>0)
         setEmployeeSelection(notAssignedEmployees)
         setSelectedEmployee({id: -1})
 
@@ -35,8 +39,16 @@ function EmployeeList(props) {
             eventCtx.assignEmployee(selectedEmployee)
         }
     }
+    const handleAssignLoggedInEmployee = () => {
+        setLoggedInEmployeeAssigned(true)
+        eventCtx.assignEmployee(loggedInEmployee)
+    }
     const handleRemoveEmployeeAssignment = (employeeId) => {
+        setLoggedInEmployeeAssigned(false)
         eventCtx.removeAssignedEmployee(employeeId)
+    }
+    const handleRemoveLoggedInEmployee = () => {
+        eventCtx.removeAssignedEmployee(loggedInEmployee.id)
     }
     return (
         <div className={styles['employee-list']}>
@@ -48,24 +60,37 @@ function EmployeeList(props) {
                             <div className="fw-bold">{index + 1}. {employee.surname} {employee.name}</div>
                         </div>
                         <div className="ms-2">
+                            {props.isAdmin &&
                             <Button handleClick={() => handleRemoveEmployeeAssignment(employee.id)}
                                     className='delete-button'>
                                 Remove
                             </Button>
+                            }
                         </div>
                     </ListGroup.Item>
                 )}
-                <ListGroup.Item as='li' style={{padding: '0px'}}
-                                className="d-flex justify-content-between align-items-start">
-                    {employeeSelection.length > 0 && <div className={styles['select-container']}>
-                        <select onChange={handleEmployeeSelection}>
-                            {employeeSelection.map((assignedEmployee, index) =>
-                                <option key={`employee_option_${index}`}
-                                        value={assignedEmployee.id}>{assignedEmployee.surname} {assignedEmployee.name}</option>)}
-                        </select>
-                        <button onClick={handleAssignEmployee}>Hinzufügen</button>
-                    </div>}
-                </ListGroup.Item>
+                {props.isAdmin ?
+                    <ListGroup.Item as='li' style={{padding: '0px'}}
+                                    className="d-flex justify-content-between align-items-start">
+                        {employeeSelection.length > 0 && <div className={styles['select-container']}>
+                            <select onChange={handleEmployeeSelection}>
+                                {employeeSelection.map((assignedEmployee, index) =>
+                                    <option key={`employee_option_${index}`}
+                                            value={assignedEmployee.id}>{assignedEmployee.surname} {assignedEmployee.name}</option>)}
+                            </select>
+                            <button onClick={handleAssignEmployee}>Hinzufügen</button>
+                        </div>}
+                    </ListGroup.Item>
+                    :
+                    <ListGroup.Item as='li' style={{padding: '0px', minHeight:'3.5rem'}}
+                                    className="d-flex justify-content-end align-items-start">
+                        {loggedInEmployeeAssigned ?
+                            <Button className='negative' handleClick={handleRemoveLoggedInEmployee}>Abmelden</Button>
+                            :
+                            <Button className='positive' handleClick={handleAssignLoggedInEmployee}>Eintragen</Button>
+                        }
+                    </ListGroup.Item>}
+
             </ListGroup>
         </div>
     )
