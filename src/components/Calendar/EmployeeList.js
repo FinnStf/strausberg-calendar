@@ -2,13 +2,13 @@ import {ListGroup} from "react-bootstrap";
 import Button from "../UI/Button";
 import styles from "./EmployeeList.module.css";
 import {useContext, useEffect, useState} from "react";
-import employeeContext from "../../store/employee-context";
+import EmployeeContext from "../../store/employee-context";
 import eventContext from "../../store/event-context";
 
 function EmployeeList(props) {
     const assignedEmployees = props.assignedEmployees
-    const employees = useContext(employeeContext).employees
-    const loggedInEmployee = useContext(employeeContext).loggedInEmployee
+    const employees = useContext(EmployeeContext).employees
+    const loggedInEmployee = useContext(EmployeeContext).loggedInEmployee
     const eventCtx = useContext(eventContext)
     const [employeeSelection, setEmployeeSelection] = useState([])
     const [selectedEmployee, setSelectedEmployee] = useState({})
@@ -23,7 +23,7 @@ function EmployeeList(props) {
         setEmployeeSelection(notAssignedEmployees)
         setSelectedEmployee({id: -1})
 
-    }, [assignedEmployees, employees])
+    }, [loggedInEmployee.id, assignedEmployees, employees])
 
 
     const handleEmployeeSelection = (event) => {
@@ -43,9 +43,9 @@ function EmployeeList(props) {
         setLoggedInEmployeeAssigned(true)
         eventCtx.assignEmployee(loggedInEmployee)
     }
-    const handleRemoveEmployeeAssignment = (employeeId) => {
+    const handleRemoveEmployeeAssignment = (employee) => {
         setLoggedInEmployeeAssigned(false)
-        eventCtx.removeAssignedEmployee(employeeId)
+        eventCtx.removeAssignedEmployee(employee)
     }
     const handleRemoveLoggedInEmployee = () => {
         eventCtx.removeAssignedEmployee(loggedInEmployee.id)
@@ -61,7 +61,7 @@ function EmployeeList(props) {
                         </div>
                         <div className="ms-2">
                             {props.isAdmin &&
-                            <Button handleClick={() => handleRemoveEmployeeAssignment(employee.id)}
+                            <Button handleClick={() => handleRemoveEmployeeAssignment(employee)}
                                     className='delete-button'>
                                 Remove
                             </Button>

@@ -8,6 +8,6 @@ const EventContext = React.createContext({
     updateEvent: (eventObj)=>{},
     deleteEvent:(eventId)=>{},
     assignEmployee:(employee)=>{},
-    removeAssignedEmployee:(employeeId)=>{}
+    removeAssignedEmployee:(employee)=>{}
 })
 export default EventContext

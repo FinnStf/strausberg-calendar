@@ -1,9 +1,10 @@
 import EventContext from "./event-context";
-import {useCallback, useEffect, useReducer} from "react";
+import {useCallback, useContext, useEffect, useReducer} from "react";
 import {addDoc, collection, getDocs} from "firebase/firestore";
 import {firestore} from "../firebase";
 import {deleteDoc, doc, updateDoc} from "firebase/firestore";
 import {getDefaultTimeString} from "../logic/calendar-transformer";
+import EmployeeContext from "./employee-context";
 
 
 const defaultEventObj = {
@@ -72,6 +73,7 @@ const eventReducer = (state, action) => {
 }
 
 function EventContextProvider(props) {
+    const employeeCtx = useContext(EmployeeContext)
     const eventCollectionRef = collection(firestore, "event")
     const [eventCtx, dispatchEventReducer] = useReducer(eventReducer, defaultEventObj)
 
@@ -136,21 +138,32 @@ function EventContextProvider(props) {
             const id = await addEvent(eventCtx.selectedEvent)
             selectEvent(id)
         }
+        //update assignedEmployees in event database and context
         const assignedEmployees = [...eventCtx.selectedEvent.extendedProps.assignedEmployees]
         assignedEmployees.push(employee)
         const eventDoc = doc(firestore, "event", eventId);
         await updateDoc(eventDoc, {"extendedProps.assignedEmployees": assignedEmployees});
         dispatchEventReducer({type: "ASSIGN_EMPLOYEE", employee: employee})
         dispatchEventReducer({type: "UPDATE_EVENT"})
+
+        //update employee document by adding shift to employee database
+        employeeCtx.addShift(employee, eventCtx.selectedEvent.extendedProps.id, eventCtx.selectedEvent.start, eventCtx.selectedEvent.end)
     }
-    const removeAssignedEmployee = async (emloyeeId) => {
+    const removeAssignedEmployee = async (employeeObj, eventParamId) => {
+        //workaround next time don't work with a selected context object but pass all data through params
+        if (eventParamId){
+            selectEvent(eventParamId)
+        }
         const eventId = eventCtx.selectedEvent.extendedProps.id
         let updatedAssignedEmployees = [...eventCtx.selectedEvent.extendedProps.assignedEmployees]
-        updatedAssignedEmployees = updatedAssignedEmployees.filter((employee) => employee.id !== emloyeeId)
+        updatedAssignedEmployees = updatedAssignedEmployees.filter((employee) => employee.id !== employeeObj.id)
         const eventDoc = doc(firestore, "event", eventId);
         await updateDoc(eventDoc, {"extendedProps.assignedEmployees": updatedAssignedEmployees});
-        dispatchEventReducer({type: "REMOVE_ASSIGNED_EMPLOYEE", employeeId: emloyeeId})
+        dispatchEventReducer({type: "REMOVE_ASSIGNED_EMPLOYEE", employeeId: employeeObj.id})
         dispatchEventReducer({type: "UPDATE_EVENT"})
+
+        //update employee document by removing shift from employee database
+        employeeCtx.removeShift(employeeObj, eventCtx.selectedEvent.extendedProps.id)
     }
     // Event Ctx Object export
     const eventCtxToolBox = {

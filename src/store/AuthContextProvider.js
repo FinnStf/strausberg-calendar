@@ -2,6 +2,7 @@ import AuthContext from "./auth-context";
 import {useCallback, useEffect, useState} from "react";
 import {getAuth} from "firebase/auth";
 import {firebaseApp} from "../firebase";
+import {useNavigate} from "react-router-dom";
 
 const calculateRemainingTime = (expirationTime) => {
     const currentTime = new Date().getTime()
@@ -24,7 +25,7 @@ const retrieveStoredSessionData = () => {
         return null
     }
     return {
-        username:storedUsername,
+        username: storedUsername,
         token: storedToken,
         duration: remainingTime
     }

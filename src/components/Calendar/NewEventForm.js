@@ -2,8 +2,8 @@ import Modal from "../UI/Modal";
 import styles from "./NewEventForm.module.css"
 import Button from "../UI/Button";
 import Input from "../UI/Input";
-import {splitDateTime, concatDateTime} from "../../logic/calendar-transformer";
-import {useContext, useEffect, useRef, useState} from "react";
+import {splitDateTime, concatDateTime, getLocalDateString} from "../../logic/calendar-transformer";
+import {useContext, useEffect, useRef} from "react";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import EmployeeList from "./EmployeeList";
@@ -35,7 +35,7 @@ function NewEventForm(props) {
     let title = 'Neues Event anlegen'
     let submitText = 'Anlegen'
     let deleteButtonIsVisible = false
-    let subtitle = startDate
+    let subtitle = getLocalDateString(startDate)
     if (props.event.extendedProps.id !== '') {
         title = `Event ${props.event.title} bearbeiten`
         submitText = 'Ändern'

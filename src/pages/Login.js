@@ -11,12 +11,12 @@ import background2 from "../assets/strausberg-02.jpg"
 import background3 from "../assets/strausberg-03.jpg"
 import background4 from "../assets/strausberg-04.jpg"
 import background5 from "../assets/strausberg-05.jpg"
-import {useContext, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import authContext from "../store/auth-context";
 import {useNavigate} from "react-router-dom"
 import {firebaseApp} from '../firebase.js';
 import {getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
-import employeeContext from "../store/employee-context";
+import EmployeeContext from "../store/employee-context";
 import {CssBaseline, Paper} from "@mui/material";
 
 
@@ -25,11 +25,15 @@ export default function Login() {
     const [isLoading, setIsLoading] = useState(false)
     const [emailError, setEmailError] = useState(null)
     const [pwdError, setPwdError] = useState(null)
+    const [backgroundImage, setBackgroundImage] = useState(background1)
     const authCtx = useContext(authContext)
-    const employeeCtx = useContext(employeeContext)
+    const employeeCtx = useContext(EmployeeContext)
     const auth = getAuth(firebaseApp)
     const navigate = useNavigate()
 
+    useEffect(()=>{
+        setBackgroundImage(getRandomImage())
+    }, [])
     const errorHandler = (errorCode) => {
         setPwdError(null)
         setEmailError(null)
@@ -114,7 +118,7 @@ export default function Login() {
                 sm={4}
                 md={8}
                 sx={{
-                    backgroundImage: `url(${getRandomImage()})`,
+                    backgroundImage: `url(${backgroundImage})`,
                     backgroundRepeat: 'no-repeat',
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',

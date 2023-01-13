@@ -1,9 +1,12 @@
 import React from "react";
 
-const employeeContext = React.createContext({
+const EmployeeContext = React.createContext({
     employees: [],
     loggedInEmployee: {},
     addEmployee: (localId, surname, lastname)=>{},
-    setLoggedInEmployee:(localId)=>{}
+    setLoggedInEmployee:(localId)=>{},
+    addShift:(employee, eventId, eventStart, eventEnd) =>{},
+    removeShift:(employee, shiftId)=>{},
+    updateShift:(employee, shiftId, start, end, pause)=>{}
 })
-export default employeeContext
+export default EmployeeContext

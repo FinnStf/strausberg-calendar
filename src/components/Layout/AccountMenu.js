@@ -9,6 +9,7 @@ import Tooltip from '@mui/material/Tooltip';
 import authContext from '../../store/auth-context'
 import Logout from '@mui/icons-material/Logout';
 import {useContext, useState} from "react";
+import {useNavigate} from "react-router-dom";
 
 export default function AccountMenu() {
     const authCtx = useContext(authContext)
@@ -16,6 +17,9 @@ export default function AccountMenu() {
 
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
+
+    const navigate = useNavigate()
+
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -77,7 +81,7 @@ export default function AccountMenu() {
                 transformOrigin={{horizontal: 'right', vertical: 'top'}}
                 anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
             >
-                <MenuItem>
+                <MenuItem onClick={()=>{navigate('profile')}}>
                     <Avatar/> {username}
                 </MenuItem>
                 <Divider/>
