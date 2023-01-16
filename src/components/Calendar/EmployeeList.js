@@ -14,7 +14,7 @@ function EmployeeList(props) {
     const [employeeSelection, setEmployeeSelection] = useState([])
     const [selectedEmployee, setSelectedEmployee] = useState({})
     const [loggedInEmployeeAssigned, setLoggedInEmployeeAssigned] = useState(false)
-
+    const [assignmentError, setAssignmentError] =useState(false)
     useEffect(() => {
         const notAssignedEmployees = employees.filter((employee) => {
             return assignedEmployees.findIndex((element) => element.id === employee.id) === -1
@@ -34,6 +34,8 @@ function EmployeeList(props) {
         setSelectedEmployee(selectedEmployee)
     }
     const handleAssignEmployee = () => {
+        if (props.event.extendedProps.id){
+
         let employee;
         if (selectedEmployee.id === -1) {
             employee = employeeSelection[0]
@@ -43,12 +45,19 @@ function EmployeeList(props) {
         eventCtx.assignEmployee(employee)
         //update employee document by adding shift to employee database
         employeeCtx.addShift(employee, props.event.extendedProps.id, props.event.start, props.event.end)
+        }else{
+            setAssignmentError(true)
+        }
     }
     const handleAssignLoggedInEmployee = () => {
+        if (props.event.extendedProps.id){
         setLoggedInEmployeeAssigned(true)
         eventCtx.assignEmployee(loggedInEmployee)
         //update employee document by adding shift to employee database
         employeeCtx.addShift(loggedInEmployee, props.event.extendedProps.id, props.event.start, props.event.end)
+        }else{
+            setAssignmentError(true)
+        }
     }
     const handleRemoveEmployeeAssignment = (employee) => {
         setLoggedInEmployeeAssigned(false)
@@ -101,7 +110,12 @@ function EmployeeList(props) {
                             <Button className='positive' handleClick={handleAssignLoggedInEmployee}>Eintragen</Button>
                         }
                     </ListGroup.Item>}
-
+                {assignmentError&&
+                <ListGroup.Item as='li' xs={{pr:2, pl:2}} style={{backgroundColor:'rgba(111,23,27,0.5)', minHeight:'3rem'}}
+                                className="d-flex justify-content-center align-items-center">
+                    <h4 style={{color:'rgb(111,23,27)', marginRight:'1rem'}}>Error: </h4>
+                    <p style={{color:'rgb(111,23,27)'}}>Bevor Mitarbeiter zugewiesen werden können, muss vorerst ein Event angelegt werden.</p>
+                </ListGroup.Item>}
             </ListGroup>
         </div>
     )

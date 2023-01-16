@@ -18,6 +18,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import {useContext, useEffect, useState} from "react";
 import ShiftForm from "./ShiftForm";
 import EventContext from "../../store/event-context";
+import Box from "@mui/material/Box";
 
 function isDateInTheFuture(value) {
     const selectedDate = new Date(value)
@@ -80,10 +81,14 @@ export default function ShiftTable(props) {
         }, 200)
     }
     useEffect(() => {
-        if (props.employee&& props.employee.shifts) {
-            setRows(props.employee.shifts.map(shift => createData(shift.id, shift.start, shift.end, shift.pause)))
+        if (props.employee && props.employee.shifts) {
+            const date = new Date(props.monthFilter)
+            const month = date.getMonth()
+            setRows(props.employee.shifts
+                .filter(shift => new Date(shift.start).getMonth() === month)
+                .map(shift => createData(shift.id, shift.start, shift.end, shift.pause)))
         }
-    }, [props.employee, props.employee.shifts])
+    }, [props.employee, props.employee.shifts, props.monthFilter])
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -118,66 +123,70 @@ export default function ShiftTable(props) {
                        onCloseModal={handleClose}
                        style={`${modalGoingOut && 'out'}`}/>
             }
-            <TableContainer sx={{maxHeight: 440}}>
-                <Table stickyHeader aria-label="sticky table">
-                    <TableHead>
-                        <TableRow>
-                            {columns.map((column) => (
-                                <TableCell
-                                    key={column.id}
-                                    align={column.align}
-                                >
-                                    {column.label}
+            {rows.length > 0 ?
+                <TableContainer sx={{maxHeight: 440}}>
+                    <Table stickyHeader aria-label="sticky table">
+                        <TableHead>
+                            <TableRow>
+                                {columns.map((column) => (
+                                    <TableCell
+                                        key={column.id}
+                                        align={column.align}
+                                    >
+                                        {column.label}
+                                    </TableCell>
+                                ))}
+                                <TableCell>
+                                    Aktionen
                                 </TableCell>
-                            ))}
-                            <TableCell>
-                                Aktionen
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {rows
-                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row, index) => {
-                                return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={`table_entry_${index}`}>
-                                        {columns.map((column) => {
-                                            const value = row[column.id];
-                                            let tableEntry;
-                                            if (column.label) {
-                                                tableEntry = <TableCell style={column.style && column.style(value) ? {
-                                                    fontWeight: 'bold',
-                                                    color: '#5c6c5d'
-                                                } : {}} key={column.id} align={column.align}>
-                                                    {column.format ? column.format(value) : column.label && value}
-                                                </TableCell>
-                                            }
-                                            return (
-                                                tableEntry
-                                            );
-                                        })}
-                                        <TableCell>
-                                            <IconButton onClick={() => {
-                                                handleEditShift(index)
-                                            }} aria-label="delete">
-                                                <EditIcon/>
-                                            </IconButton>
-                                        </TableCell>
-                                    </TableRow>
-                                );
-                            })}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            <TablePagination
-                rowsPerPageOptions={[5, 10, 20]}
-                component="div"
-                count={rows.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-            />
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {rows
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((row, index) => {
+                                    return (
+                                        <TableRow hover role="checkbox" tabIndex={-1} key={`table_entry_${index}`}>
+                                            {columns.map((column) => {
+                                                const value = row[column.id];
+                                                let tableEntry;
+                                                if (column.label) {
+                                                    tableEntry =
+                                                        <TableCell style={column.style && column.style(value) ? {
+                                                            fontWeight: 'bold',
+                                                            color: '#5c6c5d'
+                                                        } : {}} key={column.id} align={column.align}>
+                                                            {column.format ? column.format(value) : column.label && value}
+                                                        </TableCell>
+                                                }
+                                                return (
+                                                    tableEntry
+                                                );
+                                            })}
+                                            <TableCell>
+                                                <IconButton onClick={() => {
+                                                    handleEditShift(index)
+                                                }} aria-label="delete">
+                                                    <EditIcon/>
+                                                </IconButton>
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })}
+                        </TableBody>
+                    </Table>
+
+                    <TablePagination
+                        rowsPerPageOptions={[5, 10, 20]}
+                        component="div"
+                        count={rows.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                </TableContainer>
+                : <Box p={8}><h2 style={{color:'grey',textAlign:'center'}}>Für diesen Nutzer sind im ausgewählten Monat keine Schichten vorhanden.</h2></Box>}
         </Paper>
     );
 }

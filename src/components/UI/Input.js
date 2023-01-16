@@ -2,9 +2,9 @@ import styles from './Input.module.css'
 
 function Input(props) {
     return (
-        <div className={styles.inputbox}>
+        <div className={`${styles.inputbox} ${styles[props.styles]}`}>
             {props.label && <span>{props.label}</span>}
-            <input className={styles[props.styles]} {...props.input}/>
+            <input {...props.input}/>
         </div>
     )
 }

@@ -3,6 +3,7 @@ import styles from "../Calendar/NewEventForm.module.css";
 import Button from "../UI/Button";
 import Input from "../UI/Input";
 import {useState} from "react";
+import {getLocalDateString} from "../../logic/calendar-transformer";
 
 export default function ShiftForm(props) {
     const [startTime, setStartTime] = useState(props.shift.startTime)
@@ -20,7 +21,7 @@ export default function ShiftForm(props) {
     return (
         <Modal style={props.style} handleClick={props.onCloseModal}>
             <div className={styles.header}>
-                <h2>Schicht am {props.shift.startDate} bearbeiten</h2>
+                <h2>Schicht am {getLocalDateString(props.shift.startDate)} bearbeiten</h2>
                 <Button className='close-button' handleClick={props.onCloseModal}>X</Button>
             </div>
             <div className={styles.body}>
