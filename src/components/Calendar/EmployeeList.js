@@ -8,7 +8,8 @@ import eventContext from "../../store/event-context";
 function EmployeeList(props) {
     const assignedEmployees = props.assignedEmployees
     const employees = useContext(EmployeeContext).employees
-    const loggedInEmployee = useContext(EmployeeContext).loggedInEmployee
+    const employeeCtx = useContext(EmployeeContext)
+    const loggedInEmployee = employeeCtx.loggedInEmployee
     const eventCtx = useContext(eventContext)
     const [employeeSelection, setEmployeeSelection] = useState([])
     const [selectedEmployee, setSelectedEmployee] = useState({})
@@ -33,22 +34,32 @@ function EmployeeList(props) {
         setSelectedEmployee(selectedEmployee)
     }
     const handleAssignEmployee = () => {
+        let employee;
         if (selectedEmployee.id === -1) {
-            eventCtx.assignEmployee(employeeSelection[0])
+            employee = employeeSelection[0]
         } else {
-            eventCtx.assignEmployee(selectedEmployee)
+            employee = selectedEmployee
         }
+        eventCtx.assignEmployee(employee)
+        //update employee document by adding shift to employee database
+        employeeCtx.addShift(employee, props.event.extendedProps.id, props.event.start, props.event.end)
     }
     const handleAssignLoggedInEmployee = () => {
         setLoggedInEmployeeAssigned(true)
         eventCtx.assignEmployee(loggedInEmployee)
+        //update employee document by adding shift to employee database
+        employeeCtx.addShift(loggedInEmployee, props.event.extendedProps.id, props.event.start, props.event.end)
     }
     const handleRemoveEmployeeAssignment = (employee) => {
         setLoggedInEmployeeAssigned(false)
         eventCtx.removeAssignedEmployee(employee)
+        //update employee document by removing shift from employee database
+        employeeCtx.removeShift(employee, props.event.extendedProps.id)
     }
     const handleRemoveLoggedInEmployee = () => {
         eventCtx.removeAssignedEmployee(loggedInEmployee.id)
+        //update employee document by removing shift from employee database
+        employeeCtx.removeShift(loggedInEmployee, props.event.extendedProps.id)
     }
     return (
         <div className={styles['employee-list']}>

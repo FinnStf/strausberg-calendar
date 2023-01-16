@@ -1,13 +1,19 @@
-import {useContext} from "react";
+import {useContext, useEffect, useState} from "react";
 import EmployeeContext from "../store/employee-context";
 import ShiftTable from "../components/Profile/ShiftTable"
 import Card from "../components/UI/Card";
 
 export default function Profile() {
     const employeeCtx = useContext(EmployeeContext)
-    const employee = employeeCtx.loggedInEmployee
+    const [selectedEmployeeIndex, setSelectedEmployeeIndex] = useState(0)
+    const selectedEmployee = employeeCtx.loggedInEmployee
 
-    //TODO employee has to be from employeeCtx.employees since there the data changes dynamically
+    useEffect(() => {
+        const employeeIndex = employeeCtx.employees.findIndex(employee => employee.authId === selectedEmployee.authId)
+        if (employeeIndex !== -1)
+            setSelectedEmployeeIndex(employeeIndex)
+    }, [employeeCtx.employees, selectedEmployee.authId])
+
     //TODO if admin select employee from selection
 
     //TODO Display for work hours this month
@@ -15,7 +21,9 @@ export default function Profile() {
     return (
         <Card>
             <h2>{employeeCtx.loggedInEmployee.surname} {employeeCtx.loggedInEmployee.lastname}</h2>
-            <ShiftTable employeeCtx={employeeCtx} employee={employee} shifts={employee.shifts}/>
+            {employeeCtx.employees.length > 0 &&
+            <ShiftTable employeeCtx={employeeCtx} employee={employeeCtx.employees[selectedEmployeeIndex]}/>
+            }
         </Card>
     )
 }

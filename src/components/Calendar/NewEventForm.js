@@ -115,6 +115,7 @@ function NewEventForm(props) {
                         <Tab tabClassName={styles['tab-item']} eventKey='edit-assignment' title='Mitarbeiter Zuweisung'>
                             <EmployeeList
                                 assignedEmployees={props.event.extendedProps.assignedEmployees}
+                                event={props.event}
                                 isAdmin={true}></EmployeeList>
                         </Tab>
                     </Tabs>
@@ -129,7 +130,9 @@ function NewEventForm(props) {
                 </div>
                 <div className={styles.body}>
                     <EmployeeList
-                        assignedEmployees={props.event.extendedProps.assignedEmployees} isAdmin={false}></EmployeeList>
+                        assignedEmployees={props.event.extendedProps.assignedEmployees}
+                        event={props.event}
+                        isAdmin={false}></EmployeeList>
                 </div>
             </>
             }

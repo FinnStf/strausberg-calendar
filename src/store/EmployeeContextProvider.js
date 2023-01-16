@@ -7,6 +7,17 @@ let defaultEmployeeState = {
     employees: [],
     loggedInEmployee: {}
 }
+const insertShiftChronically = (newShift, shifts) => {
+    const newShiftDate = new Date(newShift.start)
+    const index = shifts.findIndex(shift => new Date(shift.start) < newShiftDate)
+    if (index===-1){
+        shifts.push(newShift)
+    }else{
+        shifts.splice(index, 0, newShift)
+    }
+    return shifts
+}
+
 const employeeStateReducer = (state, action) => {
     if (action.type === 'SET') {
         return {...state, employees: action.employees}
@@ -25,7 +36,7 @@ const employeeStateReducer = (state, action) => {
             return {...state, loggedInEmployee: {}}
         }
     }
-    if (action.type === 'ADD_SHIFT' || action.type === 'REMOVE_SHIFT') {
+    if (action.type === 'ADD_SHIFT' || action.type === 'REMOVE_SHIFT' || action.type === 'UPDATE_SHIFT') {
         let updatedShifts;
         const updatedEmployees = [...state.employees]
         const employeeIndex = updatedEmployees.findIndex(employee => employee.authId === action.employee.authId)
@@ -33,12 +44,12 @@ const employeeStateReducer = (state, action) => {
         if (action.type === 'ADD_SHIFT') {
             updatedShifts = [...updatedEmployee.shifts]
             //only push shift element if it hasnt been added yet
-            if(updatedShifts.filter(shift=>shift.id===action.shift.id).length<=0){
-                updatedShifts.push(action.shift)
+            if (updatedShifts.filter(shift => shift.id === action.shift.id).length <= 0) {
+                insertShiftChronically(action.shift, updatedShifts)
             }
-        } else if ('REMOVE_SHIFT') {
+        } else if (action.type === 'REMOVE_SHIFT') {
             updatedShifts = updatedEmployee.shifts.filter(shift => shift.id !== action.shiftId)
-        } else if ('UPDATE_SHIFT') {
+        } else if (action.type === 'UPDATE_SHIFT') {
             const updatedShiftIndex = updatedEmployee.shifts.findIndex(shift => shift.id === action.updatedShift.id)
             updatedShifts = [...updatedEmployee.shifts]
             updatedShifts[updatedShiftIndex] = action.updatedShift
@@ -91,7 +102,7 @@ function EmployeeContextProvider(props) {
         if (employee.shifts) {
             shifts = [...employee.shifts]
         }
-        shifts.push(newShift)
+        shifts = insertShiftChronically(newShift, shifts)
         const employeeDoc = doc(firestore, "employee", employee.id);
         await updateDoc(employeeDoc, {shifts: shifts});
         dispatchEmployeeState({type: 'ADD_SHIFT', shift: newShift, employee: employee})

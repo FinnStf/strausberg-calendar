@@ -59,7 +59,7 @@ const columns = [
 function createData(id, start, end, pause) {
     const {date: startDate, time: startTime} = splitDateTime(start)
     const {time: endTime} = splitDateTime(end)
-    const time = getTimeSpanInMinutes(start, end)
+    const time = getTimeSpanInMinutes(start, end) - pause
     return {id, startDate, startTime, endTime, pause, time};
 }
 
@@ -80,10 +80,10 @@ export default function ShiftTable(props) {
         }, 200)
     }
     useEffect(() => {
-        if (props.shifts) {
-            setRows(props.shifts.map(shift => createData(shift.id, shift.start, shift.end, shift.pause)))
+        if (props.employee&& props.employee.shifts) {
+            setRows(props.employee.shifts.map(shift => createData(shift.id, shift.start, shift.end, shift.pause)))
         }
-    }, [props.shifts])
+    }, [props.employee, props.employee.shifts])
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);

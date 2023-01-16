@@ -8,24 +8,7 @@ import EmployeeContext from "./employee-context";
 
 
 const defaultEventObj = {
-    events: [
-        {
-            title: 'event 1',
-            start: '2022-12-12T10:30',
-            end: '2022-12-12T12:30',
-            extendedProps: {
-                id: '1', neededEmployees: 4, assignedEmployees: [{id: "1", surname: "Heike", name: "Steffan"},
-                    {id: "2", surname: "Reiner", name: "Steffan"},
-                    {id: "3", surname: "Finn", name: "Steffan"},
-                    {id: "4", surname: "Melanie", name: "Glück"}]
-            }
-        },
-        {
-            title: 'event 2',
-            start: '2022-12-02T10:30',
-            end: '2022-12-02T17:30',
-            extendedProps: {id: '2', neededEmployees: 4, assignedEmployees: []}
-        }],
+    events: [],
     selectedEvent: {title: '', start: '', end: '', extendedProps: {id: '', neededEmployees: 0, assignedEmployees: []}}
 }
 const eventReducer = (state, action) => {
@@ -145,9 +128,6 @@ function EventContextProvider(props) {
         await updateDoc(eventDoc, {"extendedProps.assignedEmployees": assignedEmployees});
         dispatchEventReducer({type: "ASSIGN_EMPLOYEE", employee: employee})
         dispatchEventReducer({type: "UPDATE_EVENT"})
-
-        //update employee document by adding shift to employee database
-        employeeCtx.addShift(employee, eventCtx.selectedEvent.extendedProps.id, eventCtx.selectedEvent.start, eventCtx.selectedEvent.end)
     }
     const removeAssignedEmployee = async (employeeObj, eventParamId) => {
         //workaround next time don't work with a selected context object but pass all data through params
@@ -161,9 +141,6 @@ function EventContextProvider(props) {
         await updateDoc(eventDoc, {"extendedProps.assignedEmployees": updatedAssignedEmployees});
         dispatchEventReducer({type: "REMOVE_ASSIGNED_EMPLOYEE", employeeId: employeeObj.id})
         dispatchEventReducer({type: "UPDATE_EVENT"})
-
-        //update employee document by removing shift from employee database
-        employeeCtx.removeShift(employeeObj, eventCtx.selectedEvent.extendedProps.id)
     }
     // Event Ctx Object export
     const eventCtxToolBox = {
