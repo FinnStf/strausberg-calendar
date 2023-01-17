@@ -1,6 +1,7 @@
 import {useContext, useEffect, useState} from "react";
 import EmployeeContext from "../store/employee-context";
 import ShiftTable from "../components/Profile/ShiftTable"
+import ShiftDownload from "../components/Profile/ShiftDownload"
 import Card from "../components/UI/Card";
 import {FormControl, InputLabel, Select} from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
@@ -51,8 +52,8 @@ export default function Profile() {
     }
     return (
         <Card>
-            <Grid container spacing={2}>
-                <Grid item xs={6} sm={3}>
+            <Grid container justifyContent='space-between' spacing={2}>
+                <Grid item xs={6} sm={2} md={2}>
                     <Typography
                         sx={{mt: 0.5}}
                         color="text.secondary"
@@ -63,7 +64,7 @@ export default function Profile() {
                     </Typography>
                 <h3>{selectedEmployee.surname} {selectedEmployee.lastname}</h3>
                 </Grid>
-                <Grid item xs={6} sm={3}>
+                <Grid item xs={6} sm={2} md={2}>
                     <Typography
                         sx={{mt: 0.5}}
                         color="text.secondary"
@@ -74,11 +75,11 @@ export default function Profile() {
                     </Typography>
                     <h3>{time} min</h3>
                 </Grid>
-                <Grid item xs={6} sm={3}>
+                <Grid item xs={5} sm={4} md={2}>
                     <Input styles='filter' label="Monat" input={{type: "month", value:monthFilter, onChange: handleFilterMonth}}/>
                 </Grid>
                 {(employeeCtx.loggedInEmployee && employeeCtx.loggedInEmployee.isAdmin) &&
-                <Grid item xs={6} sm={3}>
+                <Grid item xs={4} sm={3} md={2}>
                     <FormControl variant="standard" sx={{m: 1, minWidth: 120}}>
                         <InputLabel id="employee-selection">Name</InputLabel>
                         <Select
@@ -98,6 +99,11 @@ export default function Profile() {
 
                     </FormControl>
                 </Grid>
+                }
+                {(employeeCtx.loggedInEmployee && employeeCtx.loggedInEmployee.isAdmin) &&
+                    <Grid item alignSelf='center' xs={2} sm={1} md={2}>
+                        <ShiftDownload monthFilter={monthFilter}/>
+                    </Grid>
                 }
             </Grid>
             {employeeCtx.employees.length > 0 &&
