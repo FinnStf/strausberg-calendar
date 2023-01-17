@@ -39,8 +39,9 @@ function Calendar() {
         eventCtx.updateEvent(event)
         setModalVisible(false)
     }
-    const handleDeleteEvent = (eventId) => {
-        eventCtx.deleteEvent(eventId)
+    const handleDeleteEvent = (event) => {
+        eventCtx.deleteEvent(event.extendedProps.id)
+        employeeCtx.removeAllShifts(event.extendedProps.id, event.extendedProps.assignedEmployees)
         setModalVisible(false)
     }
     const renderEventContent = (eventInfo) => {

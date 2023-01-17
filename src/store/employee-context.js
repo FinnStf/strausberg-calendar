@@ -7,6 +7,7 @@ const EmployeeContext = React.createContext({
     setLoggedInEmployee:(localId)=>{},
     addShift:(employee, eventId, eventStart, eventEnd) =>{},
     removeShift:(employee, shiftId)=>{},
+    removeAllShifts:(shiftId, assignedEmployees)=>{},
     updateShift:(employee, shiftId, start, end, pause)=>{}
 })
 export default EmployeeContext

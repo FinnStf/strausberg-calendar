@@ -116,17 +116,18 @@ function EventContextProvider(props) {
     // Employee API
     const assignEmployee = async (employee) => {
         const eventId = eventCtx.selectedEvent.extendedProps.id
-        //in case event hasn't been added jet
+        //TODO in case event hasn't been added jet. Currently forbidden to do
         if (eventId===""){
             const id = await addEvent(eventCtx.selectedEvent)
             selectEvent(id)
         }
         //update assignedEmployees in event database and context
         const assignedEmployees = [...eventCtx.selectedEvent.extendedProps.assignedEmployees]
-        assignedEmployees.push(employee)
+        const reducedEmployeeObj = {authId: employee.authId, id: employee.id, lastname: employee.lastname, surname: employee.surname}
+        assignedEmployees.push(reducedEmployeeObj)
         const eventDoc = doc(firestore, "event", eventId);
         await updateDoc(eventDoc, {"extendedProps.assignedEmployees": assignedEmployees});
-        dispatchEventReducer({type: "ASSIGN_EMPLOYEE", employee: employee})
+        dispatchEventReducer({type: "ASSIGN_EMPLOYEE", employee: reducedEmployeeObj})
         dispatchEventReducer({type: "UPDATE_EVENT"})
     }
     const removeAssignedEmployee = async (employeeObj, eventParamId) => {

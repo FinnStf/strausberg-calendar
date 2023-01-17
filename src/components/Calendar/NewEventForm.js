@@ -81,7 +81,7 @@ function NewEventForm(props) {
         }
     }
     const onDeleteEvent = () => {
-        props.handleDeleteEvent(props.event.extendedProps.id)
+        props.handleDeleteEvent(props.event)
     }
 
     return (

@@ -87,7 +87,7 @@ function EmployeeContextProvider(props) {
 
 
     const addEmployee = async (localId, surname, lastname) => {
-        const newEmployee = {authId: localId, surname: surname, lastname: lastname, isAdmin: false}
+        const newEmployee = {authId: localId, surname: surname, lastname: lastname, isAdmin: false, shifts: []}
         const docRef = await addDoc(employeeCollectionRef, newEmployee);
         const localEmployeeObj = {...newEmployee, id: docRef.id}
         dispatchEmployeeState({type: 'ADD', newEmployee: localEmployeeObj})
@@ -117,6 +117,12 @@ function EmployeeContextProvider(props) {
         await updateDoc(employeeDoc, {shifts: updatedShifts});
         dispatchEmployeeState({type: 'REMOVE_SHIFT', shiftId: eventId, employee: employee})
     }
+    const removeAllShifts = async (eventId, assignedEmployees) => {
+      assignedEmployees.map(employee => {
+          const index = employeeState.employees.findIndex(stateEmployee=>employee.authId===stateEmployee.authId)
+          removeShift(employeeState.employees[index], eventId)
+      })
+    }
     const updateShift = async (employee, shiftId, start, end, pause) => {
         const newShiftObj = {id: shiftId, start: start, end: end, pause: pause}
         const updatedShifts = employee.shifts.map(shift => {
@@ -137,6 +143,7 @@ function EmployeeContextProvider(props) {
         setLoggedInEmployee: setLoggedInEmployee,
         addShift: addShift,
         removeShift: removeShift,
+        removeAllShifts:removeAllShifts,
         updateShift: updateShift
     }
     return (
