@@ -60,13 +60,13 @@ function EmployeeList(props) {
         }
     }
     const handleRemoveEmployeeAssignment = (employee) => {
-        setLoggedInEmployeeAssigned(false)
         eventCtx.removeAssignedEmployee(employee)
         //update employee document by removing shift from employee database
         employeeCtx.removeShift(employee, props.event.extendedProps.id)
     }
     const handleRemoveLoggedInEmployee = () => {
-        eventCtx.removeAssignedEmployee(loggedInEmployee.id)
+        setLoggedInEmployeeAssigned(false)
+        eventCtx.removeAssignedEmployee(loggedInEmployee)
         //update employee document by removing shift from employee database
         employeeCtx.removeShift(loggedInEmployee, props.event.extendedProps.id)
     }
