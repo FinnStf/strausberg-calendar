@@ -10,7 +10,9 @@ import EmployeeContext from "../../store/employee-context";
 import CalendarEvent from "./CalendarEvent";
 
 const calendarStyleInfo = {
-    height: '100%'
+    height: 'auto',
+    firstDay:1,
+    stickyHeaderDates:true
 }
 
 function Calendar() {

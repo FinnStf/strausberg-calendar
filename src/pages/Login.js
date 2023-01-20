@@ -78,9 +78,9 @@ export default function Login() {
             .then((userCredential) => {
                 updateProfile(auth.currentUser, {
                     displayName: `${surname} ${lastname}`
-                }).then(() => {
+                }).then(async () => {
                     const user = userCredential.user;
-                    employeeCtx.addEmployee(user.reloadUserInfo.localId, surname, lastname)
+                    await employeeCtx.addEmployee(user.reloadUserInfo.localId, surname, lastname)
                     authCtx.login(user.accessToken, new Date(Date.now() + 1000000))
                     employeeCtx.setLoggedInEmployee(user.reloadUserInfo.localId)
                     setIsLoading(false)
@@ -145,8 +145,9 @@ export default function Login() {
                     <Box component="form" onSubmit={handleSubmit} sx={{mt: 3}}>
                         <Grid container spacing={2}>
                             {!isLogin &&
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={6}>
                                 <TextField
+                                    sx={{width:'100%'}}
                                     required
                                     id="surname"
                                     label="Vorname"
@@ -156,8 +157,9 @@ export default function Login() {
                             </Grid>
                             }
                             {!isLogin &&
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={6}>
                                 <TextField
+                                    sx={{width:'100%'}}
                                     required
                                     name="lastname"
                                     label="Nachname"

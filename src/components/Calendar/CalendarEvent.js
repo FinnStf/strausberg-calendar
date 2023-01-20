@@ -7,10 +7,12 @@ function CalendarEvent(props) {
     const [openSlotCount, setOpenSlotCount] = useState(0)
 
     useEffect(() => {
-        setEventStyle(calcEventBackgroundColor(props.employeesNeeded - props.assignedEmployees.length))
-        setOpenSlotCount(props.employeesNeeded - props.assignedEmployees.length)
-        setEventMarker(props.assignedEmployees.filter(employee=>employee.id===props.loggedInEmployee.id).length>0)
-    }, [props.employeesNeeded, props.assignedEmployees])
+        if (props.loggedInEmployee&&props.loggedInEmployee.id){
+            setEventStyle(calcEventBackgroundColor(props.employeesNeeded - props.assignedEmployees.length))
+            setOpenSlotCount(props.employeesNeeded - props.assignedEmployees.length)
+            setEventMarker(props.assignedEmployees.filter(employee=>employee.id===props.loggedInEmployee.id).length>0)
+        }
+    }, [props.employeesNeeded, props.assignedEmployees,props.loggedInEmployee])
 
     const calcEventBackgroundColor = (numbEmployees) => {
         if (numbEmployees > 3) {
