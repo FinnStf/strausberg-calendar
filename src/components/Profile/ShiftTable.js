@@ -15,10 +15,11 @@ import {
 } from "../../logic/calendar-transformer";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from '@mui/icons-material/Edit';
-import {useContext, useEffect, useState} from "react";
+import { useContext, useEffect, useState } from "react";
 import ShiftForm from "./ShiftForm";
 import EventContext from "../../store/event-context";
 import Box from "@mui/material/Box";
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 function isDateInTheFuture(value) {
     const selectedDate = new Date(value)
@@ -52,16 +53,17 @@ const columns = [
     },
     {
         id: 'time',
-        label: 'Arbeitszeit (min)',
+        label: 'Arbeitszeit',
         align: 'left'
     }
 ];
 
 function createData(id, start, end, pause) {
-    const {date: startDate, time: startTime} = splitDateTime(start)
-    const {time: endTime} = splitDateTime(end)
-    const time = getTimeSpanInMinutes(start, end) - pause
-    return {id, startDate, startTime, endTime, pause, time};
+    const timeWorked = getTimeSpanInMinutes(start, end) - pause
+    const { date: startDate, time: startTime } = splitDateTime(start)
+    const { time: endTime } = splitDateTime(end)
+    const time = `${Math.round(timeWorked / 60)}h ${timeWorked % 60}min`
+    return { id, startDate, startTime, endTime, pause, time };
 }
 
 export default function ShiftTable(props) {
@@ -72,6 +74,8 @@ export default function ShiftTable(props) {
     const [shiftData, setShiftData] = useState([])
     const [modalVisible, setModalVisible] = useState(false)
     const [modalGoingOut, setModalGoingOut] = useState(false)
+    const isMobileScreen = useMediaQuery('(max-width:600px)');
+
     const handleOpen = () => setModalVisible(true);
     const handleClose = () => {
         setModalGoingOut(true)
@@ -115,16 +119,16 @@ export default function ShiftTable(props) {
         handleClose()
     }
     return (
-        <Paper sx={{width: '100%', overflow: 'hidden'}}>
+        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
             {modalVisible &&
-            <ShiftForm shift={shiftData}
-                       handleUpdateEvent={handleUpdateShift}
-                       handleDeleteEvent={handleDeleteShift}
-                       onCloseModal={handleClose}
-                       style={`${modalGoingOut && 'out'}`}/>
+                <ShiftForm shift={shiftData}
+                    handleUpdateEvent={handleUpdateShift}
+                    handleDeleteEvent={handleDeleteShift}
+                    onCloseModal={handleClose}
+                    style={`${modalGoingOut && 'out'}`} />
             }
             {rows.length > 0 ?
-                <TableContainer sx={{maxHeight: 440}}>
+                <TableContainer>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
                             <TableRow>
@@ -136,7 +140,7 @@ export default function ShiftTable(props) {
                                         {column.label}
                                     </TableCell>
                                 ))}
-                                <TableCell>
+                                <TableCell hidden={isMobileScreen}>
                                     Aktionen
                                 </TableCell>
                             </TableRow>
@@ -146,16 +150,17 @@ export default function ShiftTable(props) {
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
                                     return (
-                                        <TableRow hover role="checkbox" tabIndex={-1} key={`table_entry_${index}`}>
+                                        <TableRow hover role="checkbox" tabIndex={-1} key={`table_entry_${index}`} onClick={() => { handleEditShift(index) }}>
                                             {columns.map((column) => {
                                                 const value = row[column.id];
                                                 let tableEntry;
                                                 if (column.label) {
                                                     tableEntry =
-                                                        <TableCell style={column.style && column.style(value) ? {
+                                                        <TableCell sx={column.style && column.style(value) ? {
                                                             fontWeight: 'bold',
-                                                            color: '#5c6c5d'
-                                                        } : {}} key={column.id} align={column.align}>
+                                                            color: '#5c6c5d',
+                                                            py: 4
+                                                        } : { py: 4 }} key={column.id} align={column.align}>
                                                             {column.format ? column.format(value) : column.label && value}
                                                         </TableCell>
                                                 }
@@ -163,11 +168,11 @@ export default function ShiftTable(props) {
                                                     tableEntry
                                                 );
                                             })}
-                                            <TableCell>
+                                            <TableCell hidden={isMobileScreen}>
                                                 <IconButton onClick={() => {
                                                     handleEditShift(index)
-                                                }} aria-label="delete">
-                                                    <EditIcon/>
+                                                }}>
+                                                    <EditIcon />
                                                 </IconButton>
                                             </TableCell>
                                         </TableRow>
@@ -186,7 +191,7 @@ export default function ShiftTable(props) {
                         onRowsPerPageChange={handleChangeRowsPerPage}
                     />
                 </TableContainer>
-                : <Box p={8}><h2 style={{color:'grey',textAlign:'center'}}>Für diesen Nutzer sind im ausgewählten Monat keine Schichten vorhanden.</h2></Box>}
+                : <Box p={8}><h2 style={{ color: 'grey', textAlign: 'center' }}>Für diesen Nutzer sind im ausgewählten Monat keine Schichten vorhanden.</h2></Box>}
         </Paper>
     );
 }

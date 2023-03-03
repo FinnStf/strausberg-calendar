@@ -9,11 +9,27 @@ import Input from "../components/UI/Input";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 
+
+
 export default function Profile() {
     const employeeCtx = useContext(EmployeeContext)
     const [selectedEmployee, setSelectedEmployee] = useState({authId: ''})
     const [monthFilter, setMonthFilter] = useState(`${new Date().getFullYear()}-${new Date().toLocaleString("default", { month: "2-digit" })}`)
     const [time, setTime] = useState()
+
+  const getTimeWorked = () =>{
+        const date = new Date(monthFilter)
+        const month = date.getMonth()
+        const timeWorked = selectedEmployee.shifts
+            .filter(shift => new Date(shift.start).getMonth() === month)
+            .reduce((total, shift) => {
+            const startDate = new Date(shift.start)
+            const endDate = new Date(shift.end)
+            const time = (endDate - startDate)/60000 - shift.pause
+            return total + time
+        },0)
+        return `${Math.round(timeWorked/60)}h ${timeWorked%60}min`
+    }
 
     useEffect(() => {
         if (employeeCtx.loggedInEmployee && employeeCtx.loggedInEmployee.authId) {
@@ -37,22 +53,10 @@ export default function Profile() {
     const handleFilterMonth = (event) => {
     setMonthFilter(event.target.value)
     }
-    const getTimeWorked = () =>{
-        const date = new Date(monthFilter)
-        const month = date.getMonth()
-        const timeWorked = selectedEmployee.shifts
-            .filter(shift => new Date(shift.start).getMonth() === month)
-            .reduce((total, shift) => {
-            const startDate = new Date(shift.start)
-            const endDate = new Date(shift.end)
-            const time = (endDate - startDate)/60000 - shift.pause
-            return total + time
-        },0)
-        return timeWorked
-    }
+
     return (
         <Card>
-            <Grid container justifyContent='space-between' spacing={2}>
+            <Grid sx={{mb:2}} container justifyContent='space-between' spacing={2}>
                 <Grid item xs={6} sm={2} md={2}>
                     <Typography
                         sx={{mt: 0.5}}
@@ -73,7 +77,7 @@ export default function Profile() {
                     >
                         Arbeitszeit (im Monat)
                     </Typography>
-                    <h3>{time} min</h3>
+                    <h3>{time}</h3>
                 </Grid>
                 <Grid item xs={5} sm={4} md={2}>
                     <Input styles='filter' label="Monat" input={{type: "month", value:monthFilter, onChange: handleFilterMonth}}/>

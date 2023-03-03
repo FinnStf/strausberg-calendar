@@ -73,6 +73,9 @@ Calendar Events
     box-shadow: 1px 1px 3px black;
     border-radius: 5px;
 }
+.fc-daygrid-day-events{
+  margin-bottom: .5rem!important;
+}
 
 /*
 Current Day Flag
